@@ -255,48 +255,7 @@ main {
   transform: scale(1.05);
 }
 
-/* ------------------ Floating Social Icons ------------------ */
-.social-icons {
-  position: fixed;
-  top: 50%;
-  left: 10px;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  z-index: 999;
-}
-.social-icons a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 45px;
-  height: 45px;
-  background-color: #4e54c8;
-  color: #fff;
-  border-radius: 50%;
-  transition: all 0.3s;
-  font-size: 1.2rem;
-  position: relative;
-}
-.social-icons a:hover {
-  background-color: #ffdd59;
-  color: #4e54c8;
-  transform: scale(1.2);
-}
-.social-icons a:hover::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  left: 60px;
-  background: #4e54c8;
-  color: #fff;
-  padding: 5px 10px;
-  border-radius: 5px;
-  white-space: nowrap;
-  font-size: 0.8rem;
-  opacity: 1;
-  transition: all 0.3s;
-}
+
 
 /* ------------------ Responsive ------------------ */
 @media (max-width: 767px) {
@@ -879,4 +838,14 @@ main {
   .author-info .post-title {
     font-size: 1.2rem;
   }
+}
+/* Pop animation */
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+.like-btn.pop {
+  animation: pop 0.3s ease;
 }

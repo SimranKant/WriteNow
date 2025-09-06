@@ -11,4 +11,8 @@
   <p>Email: <%= user.email %></p>
   <p>Age: <%= user.age || "Not specified" %></p>
   <p>Bio: <%= user.bio || "No bio yet." %></p>
+
+  <% if (currUser && currUser._id.toString() === user._id.toString()) { %>
+    <a href="/<%= user._id %>/edit" class="btn btn-primary mt-3">Edit Profile</a>
+  <% } %>
 </div>

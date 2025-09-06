@@ -102,3 +102,25 @@ module.exports.search = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+module.exports.toggleLike = async (req, res) => {
+  const { id } = req.params;
+  const post = await Post.findById(id);
+
+  if (!post) return res.status(404).json({ success: false, message: 'Post not found' });
+
+  const userId = req.user._id;
+
+  let liked;
+  if(post.likedBy.includes(userId)){
+    post.likedBy.pull(userId);
+    post.likes = Math.max(post.likes - 1, 0);
+    liked = false;
+  } else {
+    post.likedBy.push(userId);
+    post.likes += 1;
+    liked = true;
+  }
+
+  await post.save();
+  res.json({ success: true, likes: post.likes, liked });
+};

@@ -4,15 +4,6 @@ const path = require("path");
 const fs = require("fs");
 const { storage } = require("../cloudConfig.js");
 
-// // Configure multer for file upload
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, "uploads/"); // make sure folder exists
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, Date.now() + path.extname(file.originalname));
-//   },
-// });
 const upload = multer({ storage });
 
 module.exports.uploadProfile = upload.single("profilePicture");
@@ -65,4 +56,42 @@ module.exports.logout = (req, res, next) => {
     req.flash("success", "You are logged out");
     res.redirect("/posts");
   });
+};
+// Edit Profile Form
+module.exports.renderEditForm = async (req, res) => {
+  const { id } = req.params;
+  if (!req.user || req.user._id.toString() !== id) {
+    req.flash("error", "You are not authorized to edit this profile.");
+    return res.redirect(`/${id}`);
+  }
+  const user = await User.findById(id);
+  res.render("users/edit.ejs", { user });
+};
+
+// Update Profile
+module.exports.updateProfile = async (req, res) => {
+  const { id } = req.params;
+  if (!req.user || req.user._id.toString() !== id) {
+    req.flash("error", "You are not authorized to update this profile.");
+    return res.redirect(`/${id}`);
+  }
+
+  const { email, age, bio } = req.body;
+  const updatedUser = await User.findByIdAndUpdate(
+    id,
+    { email, age, bio },
+    { new: true }
+  );
+
+  // If a new profile picture is uploaded
+  if (req.file) {
+    updatedUser.profilePicture = {
+      url: req.file.path,
+      filename: req.file.filename,
+    };
+    await updatedUser.save();
+  }
+
+  req.flash("success", "Profile updated successfully!");
+  res.redirect(`/${id}`);
 };

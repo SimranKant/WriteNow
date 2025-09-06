@@ -42,7 +42,6 @@ app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
-
 const store = MongoStore.create({
   mongoUrl: dbUrl,
   crypto: { secret: process.env.SECRET_CODE },
@@ -86,14 +85,16 @@ app.get("/", (req, res) => {
   res.render("landing/landing.ejs");
 });
 
-app.get("/dashboard", isLoggedIn, (req, res) => {
-  res.render("users/dashboard.ejs", { user: req.user });
+app.get("/team", (req, res) => {
+  res.render("landing/team", { title: "Our Team" });
 });
 
 
 app.use("/posts", postsRouter);
 app.use("/posts/:id/comments", commentsRouter);
 app.use("/", usersRouter);
+
+
 
 app.all("/{*any}", (req, res, next) => {
   next(new ExpressError(404, "Page not found"));

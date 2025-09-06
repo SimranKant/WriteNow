@@ -8,6 +8,7 @@ const Controller = require("../controllers/posts.js");
 const multer = require("multer");
 const { storage } = require("../cloudConfig.js");
 const upload = multer({ storage });
+const posts = require('../controllers/posts');
 
 // Index Route
 router.get("/", wrapAsync(Controller.index));
@@ -27,6 +28,7 @@ router.post(
 
 // Show Route
 router.get("/:id", wrapAsync(Controller.showPost));
+router.post('/:id/like', isLoggedIn, posts.toggleLike);
 
 // Edit Route
 router.get(

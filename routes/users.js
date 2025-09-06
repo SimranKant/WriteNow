@@ -1,8 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const users = require("../controllers/users");  
 const wrapAsync = require("../utils/wrapAsync.js");
-const { saveRedirectUrl } = require("../middleware.js");
+const User = require("../models/users.js");
+
+const { saveRedirectUrl,isLoggedIn } = require("../middleware.js");
 const {
   renderRegisterForm,
   register,
@@ -31,6 +34,29 @@ router.post(
 
 
 // Logout
+// Logout
 router.get("/logout", logout);
+
+router.get("/:id/edit", isLoggedIn, users.renderEditForm);
+
+// Update profile with multer
+router.put(
+  "/:id",
+  isLoggedIn,
+  users.uploadProfile, 
+  wrapAsync(users.updateProfile)
+);
+
+// routes/users.js
+router.get("/:id", isLoggedIn, async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (!user) {
+    req.flash("error", "User not found");
+    return res.redirect("/posts");
+  }
+  res.render("users/dashboard.ejs", { user });
+});
+
 
 module.exports = router;

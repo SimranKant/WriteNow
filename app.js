@@ -86,8 +86,32 @@ app.get("/", (req, res) => {
 });
 
 app.get("/team", (req, res) => {
-  res.render("landing/team", { title: "Our Team" });
+  const developers = [
+    {
+      name: "Simran Kant",
+      role: "Full Stack Developer",
+      image: "/images/simran.jpg", // put images in public/images
+      github: "https://github.com/simrankant",
+      linkedin: "https://www.linkedin.com/in/simrankant/"
+    },
+    {
+      name: "Jane Doe",
+      role: "UI/UX Designer",
+      image: "/images/dev2.jpg",
+      github: "https://github.com/janedoe",
+      linkedin: "https://www.linkedin.com/in/janedoe/"
+    },
+    {
+      name: "John Smith",
+      role: "Backend Developer",
+      image: "/images/dev3.jpg",
+      github: "https://github.com/johnsmith",
+      linkedin: "https://www.linkedin.com/in/johnsmith/"
+    }
+  ];
+  res.render("landing/team", { developers });
 });
+
 
 
 app.use("/posts", postsRouter);

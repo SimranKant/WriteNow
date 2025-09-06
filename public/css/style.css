@@ -849,3 +849,110 @@ main {
 .like-btn.pop {
   animation: pop 0.3s ease;
 }
+.floating-heart {
+  position: absolute;
+  font-size: 1.5rem;
+  color: #e0245e;
+  pointer-events: none;
+  animation: float-click 1s ease-out forwards;
+}
+
+@keyframes float-click {
+  0% {
+    transform: scale(1) translate(0, 0);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.4) translateY(-20px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(-50px);
+    opacity: 0;
+  }
+}
+/* Smooth counter animation */
+.like-count {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.like-count.rolling {
+  transform: translateY(-10px);
+  opacity: 0;
+}
+/* -------------------- Team Hero Section -------------------- */
+.team-hero h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #4e54c8;
+  margin-bottom: 0.5rem;
+}
+
+.team-hero p {
+  font-size: 1.2rem;
+  color: #666;
+}
+
+/* -------------------- Team Cards -------------------- */
+.team-card {
+  background: #fff;
+  border-radius: 1rem;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.team-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+}
+
+.team-card img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.team-info {
+  padding: 1rem;
+}
+
+.team-info h5 {
+  font-weight: 700;
+  margin: 0.5rem 0 0.25rem 0;
+  color: #4e54c8;
+}
+
+.team-info p {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 0.75rem;
+}
+
+/* -------------------- Social Links -------------------- */
+.team-social a {
+  margin: 0 5px;
+  font-size: 1.2rem;
+  color: #4e54c8;
+  transition: transform 0.3s, color 0.3s;
+}
+
+.team-social a:hover {
+  color: #ffdd59;
+  transform: scale(1.2);
+}
+
+/* -------------------- Responsive -------------------- */
+@media (max-width: 768px) {
+  .team-hero h1 {
+    font-size: 2.2rem;
+  }
+
+  .team-info h5 {
+    font-size: 1.1rem;
+  }
+}

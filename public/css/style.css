@@ -329,7 +329,7 @@ main {
 }
 
 /* ------------------ Form Card ------------------ */
-.register-form {
+.register-form, .login-form {
   background: linear-gradient(135deg, #f5f5ff, #e0e0ff);
   border-radius: 20px;
   transition: transform 0.3s, box-shadow 0.3s;
@@ -456,6 +456,7 @@ main {
   }
   .register-form {
     padding: 2rem 1rem;
+    
   }
   .btn-hero {
     font-size: 1rem;
@@ -464,5 +465,418 @@ main {
   .btn-login {
     font-size: 0.85rem;
     padding: 0.2rem 0.5rem;
+  }
+}
+/* Custom Alert Base */
+.custom-alert {
+  position: relative;
+  border-radius: 15px;
+  font-weight: 500;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2.5rem;
+  animation: slideDown 0.6s ease-out;
+}
+
+/* Centered message */
+.custom-alert .alert-message {
+  flex-grow: 1;
+  text-align: center;
+}
+
+/* Success gradient */
+.alert-success.custom-alert {
+  background: linear-gradient(90deg, #43e97b, #38f9d7);
+  color: #fff;
+  border: none;
+}
+
+/* Error gradient */
+.alert-danger.custom-alert {
+  background: linear-gradient(90deg, #ff4e50, #f9d423);
+  color: #fff;
+  border: none;
+}
+
+/* Close button */
+.custom-alert .btn-close {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  filter: invert(1);
+  opacity: 0.9;
+  transition: transform 0.2s;
+}
+.custom-alert .btn-close:hover {
+  transform: translateY(-50%) scale(1.2);
+}
+
+/* Slide-down animation */
+@keyframes slideDown {
+  0% {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+/* -------------------- Post Card Container -------------------- */
+.post-card-new {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  perspective: 1000px; /* for 3D tilt */
+  transform-style: preserve-3d;
+}
+
+/* Hover / Tap Shadow */
+.post-card-new:hover,
+.post-card-new:active {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* -------------------- Post Card Image -------------------- */
+.post-card-img-new {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  border-radius: 1rem 1rem 0 0;
+}
+
+.post-card-new:hover .post-card-img-new,
+.post-card-new:active .post-card-img-new {
+  filter: brightness(0.8);
+}
+
+/* -------------------- Glass Overlay -------------------- */
+.post-card-new::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(135deg,
+      rgba(78, 84, 200, 0.5),
+      rgba(143, 148, 251, 0.5),
+      rgba(255, 255, 255, 0.1),
+      rgba(78, 84, 200, 0.5));
+  background-size: 400% 400%;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: 1rem;
+  z-index: 1;
+  transform: scale(1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.post-card-new:hover::after,
+.post-card-new:active::after {
+  opacity: 1;
+  animation: gradientShift 6s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* -------------------- Card Body (Title + Author) -------------------- */
+.post-card-body-new {
+  position: absolute;
+  bottom: 50px; /* above footer */
+  left: 0;
+  width: 100%;
+  padding: 1rem 1rem;
+  text-align: center;
+  z-index: 2;
+  color: #fff;
+  pointer-events: none; /* clicks go through */
+  background: rgba(0,0,0,0.15); /* optional subtle background for readability */
+  border-radius: 0.5rem;
+}
+
+/* Title Styling */
+.post-card-title-new {
+  font-weight: 800;
+  font-size: 1.4rem;
+  margin-bottom: 0.4rem;
+  line-height: 1.2;
+  text-shadow:
+    0 2px 4px rgba(0,0,0,0.6),
+    0 4px 12px rgba(0,0,0,0.3);
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+/* Author Styling */
+.post-card-author-new {
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  letter-spacing: 0.3px;
+}
+
+/* -------------------- Card Footer -------------------- */
+.post-card-footer-new {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.5rem 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.9);
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(6px);
+  transition: transform 0.4s ease, background 0.4s ease;
+}
+
+.post-card-new:hover .post-card-footer-new,
+.post-card-new:active .post-card-footer-new {
+  transform: translateY(-10px);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* -------------------- Responsive Adjustments -------------------- */
+@media (max-width: 768px) {
+  .post-card-img-new {
+    aspect-ratio: 4/3;
+  }
+
+  .post-card-title-new {
+    font-size: 1.2rem;
+  }
+
+  .post-card-author-new {
+    font-size: 0.9rem;
+  }
+
+  .post-card-body-new {
+    bottom: 50px; /* always visible on mobile */
+  }
+}
+/* -------------------- Post Container -------------------- */
+/* -------------------- Post Container -------------------- */
+.post-container {
+  border-radius: 1.5rem;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  margin: 2rem auto; /* centers the container */
+  max-width: 600px;  /* limits width on large screens */
+}
+
+.post-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+
+/* -------------------- Post Header -------------------- */
+.post-header {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  gap: 0.75rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.author-avatar img {
+  border-radius: 50%;
+  object-fit: cover;
+  width: 50px;
+  height: 50px;
+}
+
+.author-avatar .bg-secondary {
+  width: 50px;
+  height: 50px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.author-info {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Username */
+.author-info h6 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Post Title (prominent) */
+.author-info .post-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #4e54c8;
+  margin-top: 0.15rem;
+  line-height: 1.2;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.author-info .post-title:hover {
+  color: #6f74ff;
+  transform: translateY(-2px);
+}
+
+/* -------------------- Post Image -------------------- */
+.post-image {
+  width: 100%;
+  max-height: 500px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.post-image:hover {
+  transform: scale(1.02);
+}
+
+/* -------------------- Post Body -------------------- */
+.post-body {
+  padding: 1rem 1.25rem;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* -------------------- Post Actions -------------------- */
+.post-actions {
+  padding: 0.5rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-actions button {
+  border-radius: 25px;
+  padding: 0.25rem 0.9rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.post-actions button:hover {
+  transform: scale(1.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* -------------------- Comment Form -------------------- */
+.comment-form {
+  padding: 0.5rem 1.25rem;
+}
+
+.comment-form input {
+  border-radius: 25px;
+  border: 1px solid #ced4da;
+  padding: 0.5rem 1rem;
+  flex-grow: 1;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.comment-form input:focus {
+  border-color: #4e54c8;
+  box-shadow: 0 0 5px rgba(78,84,200,0.3);
+  outline: none;
+}
+
+/* -------------------- Comments Section -------------------- */
+.comments-section {
+  padding: 0 1.25rem 1rem 1.25rem;
+}
+
+.comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.35rem 0;
+  transition: background 0.2s;
+  border-radius: 1rem;
+}
+
+.comment:hover {
+  background-color: rgba(78, 84, 200, 0.05);
+}
+
+.comment-body {
+  flex-grow: 1;
+}
+
+.comment-body strong {
+  margin-right: 0.3rem;
+}
+
+/* -------------------- Comment Avatar -------------------- */
+.comment-avatar img {
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  object-fit: cover;
+}
+
+.comment-avatar .bg-secondary {
+  width: 35px;
+  height: 35px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* -------------------- Buttons -------------------- */
+.btn-outline-primary,
+.btn-outline-secondary,
+.btn-primary,
+.btn-success,
+.btn-danger {
+  border-radius: 25px;
+  padding: 0.25rem 1rem;
+  font-size: 0.85rem;
+}
+
+/* -------------------- Responsive -------------------- */
+@media (max-width: 768px) {
+  .post-image {
+    max-height: 350px;
+  }
+}
+
+@media (max-width: 576px) {
+  .post-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .comment-form {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .author-info .post-title {
+    font-size: 1.2rem;
   }
 }

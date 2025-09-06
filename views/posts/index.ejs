@@ -1,16 +1,33 @@
 <% layout('layouts/boilerplate') -%>
-<body class="d-flex flex-column min-vh-100">
-  <div class="container flex-grow-1">
-    <% for(let post of posts){ %>
-    <a href="/posts/<%= post.id %>" style="text-decoration: none;">
-      <div class="card my-3 mt-4 mb-5">
-        <div class="card-header mb-3" style="border-radius: 2rem">
-          <b><%= post.title %></b>
-          <h5 class="card-title" style="color: aliceblue;">@<%= post.author.username %></h5>
-        </div>
-        <img class="image" src="<%= post.image.url %>" />
+
+<div class="container flex-grow-1 mt-4">
+
+  <div class="row g-4">
+    <% for (let post of posts) { %>
+      <div class="col-md-6 col-lg-4">
+        <a href="/posts/<%= post.id %>" class="text-decoration-none text-reset">
+          <div class="post-card-new shadow-sm h-100 border-0 rounded-4 position-relative">
+
+            <!-- Image -->
+            <img class="post-card-img-new rounded-top-4" src="<%= post.image.url %>" alt="<%= post.title %>">
+
+            <!-- Card Body (Title + Author) -->
+            <div class="post-card-body-new">
+              <h5 class="post-card-title-new fw-bold"><%= post.title %></h5>
+              <p class="post-card-author-new mb-0">
+                <i class="bi bi-person-circle"></i> @<%= post.author.username %>
+              </p>
+            </div>
+
+            <!-- Card Footer -->
+            <div class="post-card-footer-new">
+              <small>Click to view post</small>
+            </div>
+
+          </div>
+        </a>
       </div>
-    </a>
     <% } %>
   </div>
-</body>
+
+</div>

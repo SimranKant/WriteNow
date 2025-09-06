@@ -1,60 +1,84 @@
 <% layout('layouts/boilerplate.ejs') -%>
-<body class="d-flex flex-column min-vh-100">
-  <div class="container flex-grow-1">
-    <div class="card-show my-3 mt-4 mb-5">
-      <div class="card-header-show mb-3" style="border-radius: 2rem">
-        <b><%= post.title %></b>
-        <h5 class="card-title">@<%= post.author.username %></h5>
+
+<div class="container flex-grow-1 mt-4 mb-5">
+
+  <!-- Post Container -->
+  <div class="post-container card mb-4 shadow-sm">
+
+    <!-- Post Header: Author + Title -->
+    <div class="post-header d-flex align-items-center">
+      <div class="author-avatar me-3">
+        <% if(post.author.profilePicture && post.author.profilePicture.url){ %>
+          <img src="<%= post.author.profilePicture.url %>" alt="Author" />
+        <% } else { %>
+          <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center">@</div>
+        <% } %>
       </div>
-      <div class="card-body">
-        <img class="image mb-3" src="<%= post.image.url %>" />
-        <p><%= post.content %></p>
+      <div class="author-info">
+        <h6><%= post.author.username %></h6>
+        <div class="post-title"><%= post.title %></div>
+      </div>
+    </div>
+
+    <!-- Post Image -->
+    <% if(post.image && post.image.url){ %>
+      <img src="<%= post.image.url %>" class="post-image" />
+    <% } %>
+
+    <!-- Post Content -->
+    <div class="post-body">
+      <p><%= post.content %></p>
+    </div>
+
+    <!-- Post Actions -->
+    <div class="post-actions">
+      <div>
+        <button class="btn btn-outline-primary btn-sm">Like</button>
+        <button class="btn btn-outline-secondary btn-sm">Comment</button>
       </div>
       <% if(currUser && post.author._id.equals(currUser._id)){ %>
-      <div class="btns">
-        <a class="btn btn-success btn-show" href="/posts/<%= post._id %>/edit"
-          >Edit</a
-        >
-        <form method="post" action="/posts/<%= post._id %>?_method=delete">
-          <button class="btn btn-danger btn-show">Delete</button>
-        </form>
-      </div>
-      <% } %> <% if(currUser){ %>
-      <div class="comment">
-        <form method="post" action="/posts/<%= post.id %>/comments">
-          <input
-            placeholder="add a comment.."
-            class="form-control"
-            id="comment"
-            name="comment"
-          />
-          <button class="btn btn-success mt-1">Comment</button>
+      <div>
+        <a href="/posts/<%= post._id %>/edit" class="btn btn-success btn-sm me-1">Edit</a>
+        <form method="post" action="/posts/<%= post._id %>?_method=delete" class="d-inline">
+          <button class="btn btn-danger btn-sm">Delete</button>
         </form>
       </div>
       <% } %>
+    </div>
 
-      <div class="row mt-3">
-        <h3>All Comments</h3>
-        <% for(comment of post.comments){ %>
-        <div class="card col-5 mb-3 ms-3 card-show-comm">
-          <div class="card-body">
-            <h5 class="card-show-title"><%= comment.owner.username %></h5>
-            <div class="card-show-text"><%= comment.comment %></div>
-          </div>
-          <% if (currUser && comment.owner && comment.owner._id.toString() ===
-          currUser._id.toString()) { %>
-          <form
-            method="post"
-            class="mb-3"
-            action="/posts/<%= post._id %>/comments/<%= comment._id %>?_method=DELETE"
-            style="padding-left: 1rem"
-          >
-            <button class="btn btn-sm btn-outline-danger">Delete</button>
-          </form>
+    <!-- Add Comment Form -->
+    <% if(currUser){ %>
+    <div class="comment-form">
+      <form method="post" action="/posts/<%= post.id %>/comments" class="d-flex gap-2">
+        <input type="text" name="comment" placeholder="Add a comment..." required />
+        <button class="btn btn-primary btn-sm"><i class="fa-solid fa-share"></i></button>
+      </form>
+    </div>
+    <% } %>
+
+    <!-- Comments Section -->
+    <div class="comments-section">
+      <% for(let comment of post.comments){ %>
+      <div class="comment d-flex align-items-start">
+        <div class="comment-avatar me-2">
+          <% if(comment.owner.profilePicture && comment.owner.profilePicture.url){ %>
+            <img src="<%= comment.owner.profilePicture.url %>" alt="Commenter" />
+          <% } else { %>
+            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center">@</div>
           <% } %>
         </div>
+        <div class="comment-body flex-grow-1">
+          <strong><%= comment.owner.username %></strong> <span><%= comment.comment %></span>
+        </div>
+        <% if(currUser && comment.owner && comment.owner._id.toString() === currUser._id.toString()){ %>
+        <form method="post" action="/posts/<%= post._id %>/comments/<%= comment._id %>?_method=DELETE" class="ms-2">
+          <button class="btn btn-sm btn-outline-danger">Delete</button>
+        </form>
         <% } %>
       </div>
+      <% } %>
     </div>
+
   </div>
-</body>
+
+</div>

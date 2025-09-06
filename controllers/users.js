@@ -2,19 +2,21 @@ const User = require("../models/users.js");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const { storage } = require("../cloudConfig.js");
 
-// Configure multer for file upload
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/"); // make sure folder exists
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
+// // Configure multer for file upload
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "uploads/"); // make sure folder exists
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, Date.now() + path.extname(file.originalname));
+//   },
+// });
 const upload = multer({ storage });
 
 module.exports.uploadProfile = upload.single("profilePicture");
+
 
 module.exports.renderRegisterForm = (req, res) => {
   res.render("users/register.ejs");
@@ -27,9 +29,12 @@ module.exports.register = async (req, res, next) => {
 
     // If a file is uploaded
     if (req.file) {
-      newUser.profilePicture.url = `/uploads/${req.file.filename}`;
-      newUser.profilePicture.filename = req.file.filename;
-    }
+  newUser.profilePicture = {
+    url: req.file.path,       // 👈 Cloudinary secure URL
+    filename: req.file.filename, // 👈 Cloudinary public_id
+  };
+}
+
 
     const registeredUser = await User.register(newUser, password);
 
@@ -61,4 +66,3 @@ module.exports.logout = (req, res, next) => {
     res.redirect("/posts");
   });
 };
-

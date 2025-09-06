@@ -1,0 +1,16 @@
+<% layout('layouts/boilerplate') -%>
+<body class="d-flex flex-column min-vh-100">
+  <div class="container flex-grow-1">
+    <% for(let post of posts){ %>
+    <a href="/posts/<%= post.id %>" style="text-decoration: none;">
+      <div class="card my-3 mt-4 mb-5">
+        <div class="card-header mb-3" style="border-radius: 2rem">
+          <b><%= post.title %></b>
+          <h5 class="card-title" style="color: aliceblue;">@<%= post.author.username %></h5>
+        </div>
+        <img class="image" src="<%= post.image.url %>" />
+      </div>
+    </a>
+    <% } %>
+  </div>
+</body>

@@ -1,0 +1,14 @@
+<% layout('layouts/boilerplate') -%>
+
+<div class="container mt-5">
+  <h2>Welcome, <%= user.username %>!</h2>
+  <img
+    src="<%= user.profilePicture?.url || '/images/default-avatar.png' %>"
+    alt="Profile"
+    class="rounded-circle"
+    style="width: 100px; height: 100px; object-fit: cover;"
+  />
+  <p>Email: <%= user.email %></p>
+  <p>Age: <%= user.age || "Not specified" %></p>
+  <p>Bio: <%= user.bio || "No bio yet." %></p>
+</div>

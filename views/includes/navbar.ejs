@@ -1,0 +1,79 @@
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container-fluid">
+    <!-- Brand on the left -->
+    <% if(currUser){ %>
+    <a class="navbar-brand" href="/posts">
+      <p>WriteNow</p>
+    </a>
+    <% } else { %>
+    <a class="navbar-brand" href="/">
+      <p>WriteNow</p>
+    </a>
+    <% } %>
+
+    <!-- Toggler -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar content -->
+    <div
+      class="collapse navbar-collapse justify-content-between"
+      id="navbarNavAltMarkup"
+    >
+      <!-- Search in center -->
+      <div class="mx-auto">
+        <form class="d-flex" role="search" action="/posts/search" method="GET">
+          <input
+            class="form-control me-2"
+            type="search"
+            name="q"
+            placeholder="Search"
+          />
+          <button class="btn btn-search" type="submit">Search</button>
+        </form>
+      </div>
+
+      <!-- Links on right -->
+      <div class="navbar-nav d-flex align-items-center">
+        <a class="nav-link" href="/posts">Posts</a>
+        <% if(currUser){ %>
+        <a class="nav-link" href="/posts/new">Create Post</a>
+
+        <!-- Profile Picture -->
+        <div class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle d-flex align-items-center"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img
+              src="<%= currUser.profilePicture?.url || '/images/default-avatar.png' %>"
+              alt="Profile"
+              class="rounded-circle"
+              style="width: 35px; height: 35px; object-fit: cover; margin-right: 8px;"
+            />
+            <span><%= currUser.username %></span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
+            <li><a class="dropdown-item" href="/logout">Logout</a></li>
+          </ul>
+        </div>
+
+        <% } else { %>
+        <a class="nav-link" href="/register">Register</a>
+        <a class="nav-link" href="/login">Login</a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</nav>

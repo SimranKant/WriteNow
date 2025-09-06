@@ -1,0 +1,99 @@
+<% layout('layouts/boilerplate') -%>
+
+<div class="container ">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h1 class="text-center mb-4 hero-gradient-text">Sign Up on WriteNow</h1>
+
+      <form
+        action="/register"
+        method="post"
+        enctype="multipart/form-data"
+        class="register-form shadow p-4 rounded"
+        novalidate
+      >
+        <!-- Floating label input -->
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            name="username"
+            class="form-control custom-input"
+            id="username"
+            placeholder="Username"
+            required
+          />
+          <label for="username">Username</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input
+            type="email"
+            name="email"
+            class="form-control custom-input"
+            id="email"
+            placeholder="Email"
+            required
+          />
+          <label for="email">Email</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input
+            type="password"
+            name="password"
+            class="form-control custom-input"
+            id="password"
+            placeholder="Password"
+            required
+          />
+          <label for="password">Password</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input
+            type="number"
+            name="age"
+            class="form-control custom-input"
+            id="age"
+            placeholder="Age"
+          />
+          <label for="age">Age</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <textarea
+            name="bio"
+            class="form-control custom-input"
+            id="bio"
+            placeholder="Bio"
+            rows="3"
+          ></textarea>
+          <label for="bio">Bio</label>
+        </div>
+
+        <div class="mb-3">
+          <label for="profilePicture" class="form-label">Profile Picture</label>
+          <input
+            name="profilePicture"
+            type="file"
+            class="form-control custom-input"
+            id="profilePicture"
+          />
+        </div>
+
+        <div class="d-grid mt-4">
+          <button type="submit" class="btn btn-hero btn-lg">Sign Up</button>
+        </div>
+
+        <p class="text-center mt-3">
+          Already have an account?
+          <a
+            href="/login"
+            class="btn btn-login btn-sm  fw-bold"
+            >Login</a
+          >
+        </p>
+      </form>
+    </div>
+  </div>
+</div>

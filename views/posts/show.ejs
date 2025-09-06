@@ -1,0 +1,60 @@
+<% layout('layouts/boilerplate.ejs') -%>
+<body class="d-flex flex-column min-vh-100">
+  <div class="container flex-grow-1">
+    <div class="card-show my-3 mt-4 mb-5">
+      <div class="card-header-show mb-3" style="border-radius: 2rem">
+        <b><%= post.title %></b>
+        <h5 class="card-title">@<%= post.author.username %></h5>
+      </div>
+      <div class="card-body">
+        <img class="image mb-3" src="<%= post.image.url %>" />
+        <p><%= post.content %></p>
+      </div>
+      <% if(currUser && post.author._id.equals(currUser._id)){ %>
+      <div class="btns">
+        <a class="btn btn-success btn-show" href="/posts/<%= post._id %>/edit"
+          >Edit</a
+        >
+        <form method="post" action="/posts/<%= post._id %>?_method=delete">
+          <button class="btn btn-danger btn-show">Delete</button>
+        </form>
+      </div>
+      <% } %> <% if(currUser){ %>
+      <div class="comment">
+        <form method="post" action="/posts/<%= post.id %>/comments">
+          <input
+            placeholder="add a comment.."
+            class="form-control"
+            id="comment"
+            name="comment"
+          />
+          <button class="btn btn-success mt-1">Comment</button>
+        </form>
+      </div>
+      <% } %>
+
+      <div class="row mt-3">
+        <h3>All Comments</h3>
+        <% for(comment of post.comments){ %>
+        <div class="card col-5 mb-3 ms-3 card-show-comm">
+          <div class="card-body">
+            <h5 class="card-show-title"><%= comment.owner.username %></h5>
+            <div class="card-show-text"><%= comment.comment %></div>
+          </div>
+          <% if (currUser && comment.owner && comment.owner._id.toString() ===
+          currUser._id.toString()) { %>
+          <form
+            method="post"
+            class="mb-3"
+            action="/posts/<%= post._id %>/comments/<%= comment._id %>?_method=DELETE"
+            style="padding-left: 1rem"
+          >
+            <button class="btn btn-sm btn-outline-danger">Delete</button>
+          </form>
+          <% } %>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</body>

@@ -90,7 +90,6 @@ app.get("/dashboard", isLoggedIn, (req, res) => {
 });
 
 
-
 app.use("/posts", postsRouter);
 app.use("/posts/:id/comments", commentsRouter);
 app.use("/", usersRouter);

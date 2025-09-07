@@ -1,81 +1,134 @@
 <% layout('layouts/boilerplate') -%>
 
 <div class="container mt-5">
-  <h2>Edit Profile</h2>
-  <form
-    action="/users/<%= user._id %>?_method=PUT"
-    method="POST"
-    enctype="multipart/form-data"
-    id="editProfileForm"
-  >
-    <div class="mb-3">
-      <label class="form-label">Username</label>
-      <input
-        type="text"
-        name="username"
-        id="usernameField"
-        class="form-control"
-        value="<%= user.username %>"
-        required
-      />
-    </div>
+  <div class="edit-profile-form p-4">
+    <h2 class="text-center mb-4 hero-gradient-text">Edit Profile</h2>
 
-    <div class="mb-3">
-      <label class="form-label">Email</label>
-      <input
-        type="email"
-        name="email"
-        id="emailField"
-        class="form-control"
-        value="<%= user.email %>"
-        required
-      />
-    </div>
+    <!-- Tabs Navigation -->
+    <ul class="nav nav-pills justify-content-center mb-4" id="editProfileTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="info-tab" data-bs-toggle="pill" data-bs-target="#info" type="button" role="tab">Profile Info</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="details-tab" data-bs-toggle="pill" data-bs-target="#details" type="button" role="tab">Personal Details</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="avatar-tab" data-bs-toggle="pill" data-bs-target="#avatar" type="button" role="tab">Avatar</button>
+      </li>
+    </ul>
 
-    <!-- Confirm Password (hidden by default) -->
-    <div class="mb-3" id="passwordField" style="display: none;">
-      <label class="form-label">Confirm Password</label>
-      <input
-        type="password"
-        name="password"
-        class="form-control"
-        placeholder="Enter your password"
-      />
-      <small class="text-muted">Required if changing username or email</small>
-    </div>
+    <form
+      action="/users/<%= user._id %>?_method=PUT"
+      method="POST"
+      enctype="multipart/form-data"
+      id="editProfileForm"
+    >
+      <div class="tab-content" id="editProfileTabsContent">
+        
+        <!-- Profile Info Tab -->
+        <div class="tab-pane fade show active" id="info" role="tabpanel">
+          <div class="form-floating mb-4">
+            <input
+              type="text"
+              name="username"
+              id="usernameField"
+              class="form-control custom-input"
+              value="<%= user.username %>"
+              placeholder="Username"
+              required
+            />
+            <label for="usernameField">Username</label>
+          </div>
 
-    <div class="mb-3">
-      <label class="form-label">Age</label>
-      <input
-        type="number"
-        name="age"
-        class="form-control"
-        value="<%= user.age %>"
-      />
-    </div>
+          <div class="form-floating mb-4">
+            <input
+              type="email"
+              name="email"
+              id="emailField"
+              class="form-control custom-input"
+              value="<%= user.email %>"
+              placeholder="Email"
+              required
+            />
+            <label for="emailField">Email</label>
+          </div>
 
-    <div class="mb-3">
-      <label class="form-label">Bio</label>
-      <textarea name="bio" class="form-control" rows="3"><%= user.bio %></textarea>
-    </div>
+          <!-- Confirm Password -->
+          <div class="form-floating mb-4" id="passwordField" style="display: none;">
+            <input
+              type="password"
+              name="password"
+              class="form-control custom-input"
+              placeholder="Confirm Password"
+            />
+            <label for="passwordField">Confirm Password</label>
+            <small class="text-muted">Required if changing username or email</small>
+          </div>
+        </div>
 
-    <div class="mb-3">
-      <label class="form-label">Profile Picture</label><br />
-      <img
-        src="<%= user.profilePicture?.url || '/images/default-avatar.png' %>"
-        alt="Profile"
-        class="rounded-circle mb-3"
-        style="width: 100px; height: 100px; object-fit: cover"
-      />
-      <input type="file" name="profilePicture" class="form-control" />
-    </div>
+        <!-- Personal Details Tab -->
+        <div class="tab-pane fade" id="details" role="tabpanel">
+          <div class="row g-4">
+            <div class="col-md-4">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  name="age"
+                  class="form-control custom-input"
+                  value="<%= user.age %>"
+                  placeholder="Age"
+                />
+                <label>Age</label>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="form-floating">
+                <textarea
+                  name="bio"
+                  class="form-control custom-input"
+                  placeholder="Bio"
+                  style="height: 120px"
+                ><%= user.bio %></textarea>
+                <label>Bio</label>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <button type="submit" class="btn btn-success">Save Changes</button>
-    <a href="/users/<%= user._id %>" class="btn btn-secondary">Cancel</a>
-  </form>
+        <!-- Avatar Tab -->
+        <div class="tab-pane fade text-center" id="avatar" role="tabpanel">
+          <div class="d-flex flex-column align-items-center">
+            <!-- Profile Picture Preview -->
+            <img
+              id="profilePreview"
+              src="<%= user.profilePicture?.url || '/images/default-avatar.png' %>"
+              alt="Profile"
+              class="rounded-circle mb-3 profile-preview"
+            />
+
+            <!-- Custom Upload Button -->
+            <label for="profilePicture" class="btn btn-hero px-4 py-2 mb-2">
+              📷 Upload New Picture
+            </label>
+            <input type="file" name="profilePicture" id="profilePicture" class="d-none" accept="image/*" />
+
+            <!-- File name preview -->
+            <small id="fileName" class="text-muted">No file chosen</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Save/Cancel Buttons -->
+      <div class="d-flex justify-content-center gap-3 mt-5">
+        <button type="submit" class="btn btn-hero px-4 py-2">💾 Save Changes</button>
+        <a href="/users/<%= user._id %>" class="btn btn-secondary px-4 py-2">✖ Cancel</a>
+      </div>
+    </form>
+  </div>
 </div>
 
 <script>
+  // Show password confirmation only if username/email changes
   const usernameField = document.getElementById("usernameField");
   const emailField = document.getElementById("emailField");
   const passwordField = document.getElementById("passwordField");
@@ -96,4 +149,93 @@
 
   usernameField.addEventListener("input", checkChanges);
   emailField.addEventListener("input", checkChanges);
+
+  // Avatar live preview
+  const profileInput = document.getElementById("profilePicture");
+  const fileNameDisplay = document.getElementById("fileName");
+  const profilePreview = document.getElementById("profilePreview");
+
+  profileInput.addEventListener("change", () => {
+    if (profileInput.files.length > 0) {
+      const file = profileInput.files[0];
+      fileNameDisplay.textContent = file.name;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        profilePreview.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      fileNameDisplay.textContent = "No file chosen";
+    }
+  });
 </script>
+
+<style>
+  .edit-profile-form {
+    max-width: 750px;
+    margin: auto;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    border-radius: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    animation: slideUpFade 0.8s forwards;
+  }
+
+  .form-floating .form-control {
+    border-radius: 14px;
+    padding: 12px 16px;
+  }
+
+  .profile-preview {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border: 4px solid #4e54c8;
+    box-shadow: 0 4px 12px rgba(78,84,200,0.3);
+    transition: transform 0.3s ease;
+  }
+
+  .profile-preview:hover {
+    transform: scale(1.05);
+  }
+
+  #fileName {
+    font-size: 0.9rem;
+    margin-top: 4px;
+  }
+
+  .nav-pills .nav-link {
+    border-radius: 50px;
+    font-weight: 600;
+    color: #4e54c8;
+    transition: all 0.3s ease;
+    padding: 10px 20px;
+  }
+
+  .nav-pills .nav-link.active {
+    background: linear-gradient(90deg, #4e54c8, #8f94fb);
+    color: white;
+    box-shadow: 0 5px 15px rgba(78,84,200,0.3);
+  }
+
+  .btn-hero {
+    border-radius: 50px;
+    font-weight: 600;
+  }
+
+  .btn-secondary {
+  border-radius: 50px;
+  font-weight: 600;
+  background: #ff4d4d;        /* Bright red background */
+  color: white;               /* White text */
+  border: none;               /* Remove border */
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: #e60000;        /* Darker red on hover */
+  color: white;
+}
+
+</style>

@@ -42,39 +42,34 @@
 </section>
 
 <!-- Popular Posts Section -->
+<!-- Popular Posts Section -->
 <section class="container my-5" id="popular-posts">
   <h2 class="text-center mb-4">Popular Posts</h2>
   <div class="row">
-    <div class="col-md-4">
-      <div class="post-card fade-up">
-        <img src="https://picsum.photos/400/200?random=1" alt="Post Image">
-        <div class="post-info">
-          <h5>Post Title 1</h5>
-          <p>by Author</p>
-          <a href="#" class="btn-read">Read More</a>
+    <% if (popularPosts.length > 0) { %>
+      <% popularPosts.forEach(post => { %>
+        <div class="col-md-4">
+          <div class="post-card fade-up">
+            <% if(post.image?.url) { %>
+              <img src="<%= post.image.url %>" alt="<%= post.title %>">
+            <% } else { %>
+              <img src="https://picsum.photos/400/200?random=<%= Math.floor(Math.random()*1000) %>" alt="<%= post.title %>">
+            <% } %>
+            <div class="post-info">
+              <h5><%= post.title %></h5>
+              <p>by @<%= post.author.username %></p>
+              <a href="/posts/<%= post._id %>" class="btn-read">Read More</a>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="post-card fade-up">
-        <img src="https://picsum.photos/400/200?random=2" alt="Post Image">
-        <div class="post-info">
-          <h5>Post Title 2</h5>
-          <p>by Author</p>
-          <a href="#" class="btn-read">Read More</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="post-card fade-up">
-        <img src="https://picsum.photos/400/200?random=3" alt="Post Image">
-        <div class="post-info">
-          <h5>Post Title 3</h5>
-          <p>by Author</p>
-          <a href="#" class="btn-read">Read More</a>
-        </div>
-      </div>
-    </div>
+      <% }) %>
+    <% } else { %>
+      <p class="text-center">No popular posts yet. Be the first to create one!</p>
+    <% } %>
+  </div>
+  
+  <!-- Read More All Posts Button -->
+  <div class="text-center mt-4">
+    <a href="/posts" class="btn-read-more">Read More Posts</a>
   </div>
 </section>
-

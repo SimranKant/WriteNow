@@ -2,22 +2,24 @@ const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
 const Post = require("../models/posts.js");
-const { isLoggedIn } = require("../middleware.js");
-const { isOwner, validatePost } = require("../middleware.js");
+const { isLoggedIn, isOwner, validatePost } = require("../middleware.js");
 const Controller = require("../controllers/posts.js");
 const multer = require("multer");
 const { storage } = require("../cloudConfig.js");
 const upload = multer({ storage });
-const posts = require('../controllers/posts');
 
-// Index Route
+// ===== Posts Routes =====
+
+// Index Route - show all posts
 router.get("/", wrapAsync(Controller.index));
 
-// New Route
+// New Post Form
 router.get("/new", isLoggedIn, Controller.renderNewForm);
+
+// Search Route
 router.get("/search", Controller.search);
 
-// Create Route
+// Create Post
 router.post(
   "/",
   isLoggedIn,
@@ -26,19 +28,16 @@ router.post(
   wrapAsync(Controller.createPost)
 );
 
-// Show Route
+// Show Post
 router.get("/:id", wrapAsync(Controller.showPost));
-router.post('/:id/like', isLoggedIn, posts.toggleLike);
 
-// Edit Route
-router.get(
-  "/:id/edit",
-  isLoggedIn,
-  isOwner,
-  wrapAsync(Controller.renderEditForm)
-);
+// Like / Unlike Post
+router.post("/:id/like", isLoggedIn, wrapAsync(Controller.toggleLike));
 
-// Update Route
+// Edit Post Form
+router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(Controller.renderEditForm));
+
+// Update Post
 router.put(
   "/:id",
   isLoggedIn,
@@ -47,7 +46,7 @@ router.put(
   wrapAsync(Controller.editPost)
 );
 
-// Delete Route
+// Delete Post
 router.delete("/:id", isLoggedIn, isOwner, wrapAsync(Controller.deletePost));
 
 module.exports = router;

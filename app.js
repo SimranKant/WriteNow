@@ -21,6 +21,7 @@ const favicon = require("serve-favicon");
 const postsRouter = require("./routes/posts.js");
 const commentsRouter = require("./routes/comments.js");
 const usersRouter = require("./routes/users.js");
+const landingRouter = require("./routes/landing");
 
 const dbUrl = process.env.ATLASDB_URL;
 
@@ -85,9 +86,9 @@ app.use((req, res, next) => {
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 
-app.get("/", (req, res) => {
-  res.render("landing/landing.ejs");
-});
+// app.get("/", (req, res) => {
+//   res.render("landing/landing.ejs");
+// });
 
 app.get("/team", (req, res) => {
   const developers = [
@@ -121,6 +122,7 @@ app.get("/team", (req, res) => {
 app.use("/posts", postsRouter);
 app.use("/posts/:id/comments", commentsRouter);
 app.use("/users", usersRouter);
+app.use("/", landingRouter); // Landing page at '/'
 
 
 

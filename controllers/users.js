@@ -129,5 +129,64 @@ module.exports.updateProfile = async (req, res) => {
   req.flash("success", "Profile updated successfully!");
   res.redirect(`/users/${id}`);
 };
+module.exports.followUser = async (req, res) => {
+  const { id } = req.params; // id of user to follow
+  const currentUserId = req.user._id;
 
+  if (currentUserId.equals(id)) {
+    return res.status(400).json({ error: "You cannot follow yourself." });
+  }
 
+  const userToFollow = await User.findById(id);
+  const currentUser = await User.findById(currentUserId);
+
+  if (!userToFollow || !currentUser) {
+    return res.status(404).json({ error: "User not found." });
+  }
+
+  if (!userToFollow.followers.includes(currentUserId)) {
+    userToFollow.followers.push(currentUserId);
+    currentUser.following.push(id);
+
+    await userToFollow.save();
+    await currentUser.save();
+
+    return res.json({
+      success: true,
+      action: "followed",
+      followersCount: userToFollow.followers.length,
+      followingCount: currentUser.following.length
+    });
+  }
+
+  return res.status(400).json({ error: "Already following this user." });
+};
+
+module.exports.unfollowUser = async (req, res) => {
+  const { id } = req.params; // id of user to unfollow
+  const currentUserId = req.user._id;
+
+  const userToUnfollow = await User.findById(id);
+  const currentUser = await User.findById(currentUserId);
+
+  if (!userToUnfollow || !currentUser) {
+    return res.status(404).json({ error: "User not found." });
+  }
+
+  userToUnfollow.followers = userToUnfollow.followers.filter(
+    (f) => !f.equals(currentUserId)
+  );
+  currentUser.following = currentUser.following.filter(
+    (f) => !f.equals(id)
+  );
+
+  await userToUnfollow.save();
+  await currentUser.save();
+
+  return res.json({
+    success: true,
+    action: "unfollowed",
+    followersCount: userToUnfollow.followers.length,
+    followingCount: currentUser.following.length
+  });
+};

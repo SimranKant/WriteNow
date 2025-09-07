@@ -36,7 +36,7 @@ const postSchema = new Schema({
       ref: "User",
     },
   ],
-});
+},{ timestamps: true });
 
 // Cascade delete comments when a post is deleted
 postSchema.post("findOneAndDelete", async (post) => {

@@ -5,7 +5,9 @@ const users = require("../controllers/users");
 const wrapAsync = require("../utils/wrapAsync.js");
 const User = require("../models/users.js");
 
-const { saveRedirectUrl,isLoggedIn } = require("../middleware.js");
+const { saveRedirectUrl, isLoggedIn } = require("../middleware.js");
+
+// Controllers you already have
 const {
   renderRegisterForm,
   register,
@@ -15,11 +17,13 @@ const {
   uploadProfile,
 } = require("../controllers/users.js");
 
-// Register routes
+// ---------- AUTH ROUTES ----------
+
+// Register
 router.get("/register", renderRegisterForm);
 router.post("/register", uploadProfile, wrapAsync(register));
 
-// Login routes
+// Login
 router.get("/login", getLoginForm);
 router.post(
   "/login",
@@ -31,31 +35,21 @@ router.post(
   wrapAsync(login)
 );
 
-
-
-// Logout
 // Logout
 router.get("/logout", logout);
 
+// ---------- PROFILE ROUTES ----------
+
+// Edit Profile
 router.get("/:id/edit", isLoggedIn, users.renderEditForm);
+router.put("/:id", isLoggedIn, users.uploadProfile, wrapAsync(users.updateProfile));
 
-// Update profile with multer
-router.put(
-  "/:id",
-  isLoggedIn,
-  users.uploadProfile, 
-  wrapAsync(users.updateProfile)
-);
-
-// routes/users.js
-router.get("/:id", isLoggedIn, async (req, res) => {
+// User Dashboard
+router.get("/:id", isLoggedIn, wrapAsync(async (req, res) => {
   const { id } = req.params;
 
   const user = await User.findById(id)
-    .populate({
-      path: "likedPosts",
-      populate: { path: "author" }
-    });
+    .populate({ path: "likedPosts", populate: { path: "author" } });
 
   if (!user) {
     req.flash("error", "User not found");
@@ -65,8 +59,17 @@ router.get("/:id", isLoggedIn, async (req, res) => {
   const Post = require("../models/posts");
   const myPosts = await Post.find({ author: id }).populate("author");
 
-  res.render("users/dashboard.ejs", { user, myPosts });
-});
+  res.render("users/dashboard.ejs", { user, myPosts, currUser: req.user });
+
+}));
+
+
+
+// Follow
+router.post("/:id/follow", users.followUser);
+
+// Unfollow
+router.post("/:id/unfollow", users.unfollowUser);
 
 
 

@@ -1,32 +1,52 @@
 <% layout('layouts/boilerplate') -%>
 
 <div class="container mt-5">
+
   <!-- User Profile Section -->
   <div class="card shadow-sm mb-4 border-0 rounded-3">
     <div class="card-body d-flex align-items-center justify-content-between flex-wrap">
+      
+      <!-- Avatar + Info -->
       <div class="d-flex align-items-center mb-3 mb-md-0">
-        <!-- Avatar -->
         <img
           src="<%= user.profilePicture?.url || '/images/default-avatar.png' %>"
           class="rounded-circle me-3 profile-avatar"
           style="width: 80px; height: 80px; object-fit: cover"
         />
-
-        <!-- User Info -->
         <div>
           <h4 class="mb-1 fw-bold"><%= user.username %></h4>
-          <p class="text-muted mb-0">
+          <p class="text-muted mb-0" >
             <%= user.bio && user.bio.trim() !== "" ? user.bio : "No bio added yet." %>
           </p>
+          <!-- Followers count -->
+          <p class="text-muted mb-0">
+            <strong id="followersCount-<%= user._id %>"><%= user.followers.length %></strong> Followers
+          </p>
+          <p class="text-muted mb-0">
+  <strong id="followingCount-<%= user._id %>"><%= user.following.length %></strong> Following
+</p>
+
         </div>
       </div>
 
-      <!-- Edit Button: only visible to owner -->
-      <% if(currUser && currUser._id.equals(user._id)) { %>
-      <a href="/users/<%= user._id %>/edit" class="btn btn-gradient">
-        <i class="bi bi-pencil-square"></i> Edit Profile
-      </a>
+      <!-- Follow/Unfollow Button -->
+      <% if(currUser && !currUser._id.equals(user._id)) { %>
+        <button
+          class="btn btn-gradient follow-btn"
+          data-user-id="<%= user._id %>"
+          data-following="<%= user.followers.some(f => f.equals(currUser._id)) %>"
+        >
+          <%= user.followers.some(f => f.equals(currUser._id)) ? "Unfollow" : "Follow" %>
+        </button>
       <% } %>
+
+      <!-- Edit Profile Button -->
+      <% if(currUser && currUser._id.equals(user._id)) { %>
+        <a href="/users/<%= user._id %>/edit" class="btn btn-gradient">
+          <i class="bi bi-pencil-square"></i> Edit Profile
+        </a>
+      <% } %>
+
     </div>
   </div>
 
@@ -63,84 +83,95 @@
 
   <!-- Tabs Content -->
   <div class="tab-content mt-3" id="dashboardTabsContent">
+
     <!-- Posts / My Posts -->
     <div class="tab-pane fade show active" id="posts" role="tabpanel">
       <% if(myPosts.length === 0){ %>
         <p class="text-muted text-center">No posts available.</p>
       <% } else { %>
-      <div class="row">
-        <% myPosts.forEach(post => { %>
-        <div class="col-md-4 mb-4">
-          <div class="card h-100 shadow-sm border-0 rounded-3 post-card hover-card">
-            <div class="card-img-wrapper position-relative overflow-hidden">
-              <img
-                src="<%= post.image?.url || '/images/default-post.jpg' %>"
-                class="card-img-top rounded-top-3"
-                style="height: 200px; object-fit: cover"
-              />
-              <!-- Username Overlay -->
-              <div class="card-img-overlay d-flex align-items-end overlay-content p-2">
-                <span class="bg-dark bg-opacity-50 text-white px-2 py-1 rounded" style="font-size:1.1rem; font-weight:bold;">
-                  <i class="bi bi-person-circle me-1"></i> <%= post.author.username %>
-                </span>
+        <div class="row">
+          <% myPosts.forEach(post => { %>
+            <div class="col-md-4 mb-4">
+              <div class="card h-100 shadow-sm border-0 rounded-3 post-card hover-card">
+                
+                <!-- Post Image + Overlay -->
+                <div class="card-img-wrapper position-relative overflow-hidden">
+                  <img
+                    src="<%= post.image?.url || '/images/default-post.jpg' %>"
+                    class="card-img-top rounded-top-3"
+                    style="height: 200px; object-fit: cover"
+                  />
+                  <div class="card-img-overlay d-flex align-items-end overlay-content p-2">
+                    <span class="bg-dark bg-opacity-50 text-white px-2 py-1 rounded" style="font-size:1.1rem; font-weight:bold;">
+                      <i class="bi bi-person-circle me-1"></i> <%= post.author.username %>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Post Body -->
+                <div class="card-body d-flex flex-column mt-auto">
+                  <h5 class="card-title fw-bold"><%= post.title %></h5>
+                  <p class="card-text text-muted flex-grow-1">
+                    <%= post.content.split(' ').slice(0, 20).join(' ') %>...
+                  </p>
+
+                  <!-- Follow/Unfollow Button on post card -->
+                 
+
+                  <a href="/posts/<%= post._id %>" class="btn btn-gradient mt-auto">View Post</a>
+                </div>
+
               </div>
             </div>
-            <div class="card-body d-flex flex-column mt-auto">
-              <h5 class="card-title fw-bold"><%= post.title %></h5>
-              <p class="card-text text-muted flex-grow-1">
-                <%= post.content.split(' ').slice(0, 20).join(' ') %>...
-              </p>
-              <a href="/posts/<%= post._id %>" class="btn btn-gradient mt-auto">
-                View Post
-              </a>
-            </div>
-          </div>
+          <% }) %>
         </div>
-        <% }) %>
-      </div>
       <% } %>
     </div>
 
     <!-- Liked Posts -->
     <% if(currUser && currUser._id.equals(user._id)) { %>
-    <div class="tab-pane fade" id="liked-posts" role="tabpanel">
-      <% if(user.likedPosts.length === 0){ %>
-        <p class="text-muted text-center">You haven’t liked any posts yet.</p>
-      <% } else { %>
-      <div class="row">
-        <% user.likedPosts.forEach(post => { %>
-        <div class="col-md-4 mb-4">
-          <div class="card h-100 shadow-sm border-0 rounded-3 post-card hover-card">
-            <div class="card-img-wrapper position-relative overflow-hidden">
-              <img
-                src="<%= post.image?.url || '/images/default-post.jpg' %>"
-                class="card-img-top rounded-top-3"
-                style="height: 200px; object-fit: cover"
-              />
-              <!-- Username Overlay -->
-              <div class="card-img-overlay d-flex align-items-end overlay-content p-2">
-                <span class="bg-dark bg-opacity-50 text-white px-2 py-1 rounded" style="font-size:1.2rem; font-weight:bold;">
-                  <i class="bi bi-person-circle me-1"></i> <%= post.author.username %>
-                </span>
+      <div class="tab-pane fade" id="liked-posts" role="tabpanel">
+        <% if(user.likedPosts.length === 0){ %>
+          <p class="text-muted text-center">You haven’t liked any posts yet.</p>
+        <% } else { %>
+          <div class="row">
+            <% user.likedPosts.forEach(post => { %>
+              <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm border-0 rounded-3 post-card hover-card">
+                  
+                  <div class="card-img-wrapper position-relative overflow-hidden">
+                    <img
+                      src="<%= post.image?.url || '/images/default-post.jpg' %>"
+                      class="card-img-top rounded-top-3"
+                      style="height: 200px; object-fit: cover"
+                    />
+                    <div class="card-img-overlay d-flex align-items-end overlay-content p-2">
+                      <span class="bg-dark bg-opacity-50 text-white px-2 py-1 rounded" style="font-size:1.2rem; font-weight:bold;">
+                        <i class="bi bi-person-circle me-1"></i> <%= post.author.username %>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="card-body d-flex flex-column mt-auto">
+                    <h5 class="card-title fw-bold"><%= post.title %></h5>
+                    <p class="card-text text-muted flex-grow-1">
+                      <%= post.content.split(' ').slice(0, 20).join(' ') %>...
+                    </p>
+
+                    
+
+                    <a href="/posts/<%= post._id %>" class="btn btn-gradient mt-auto">View Post</a>
+                  </div>
+
+                </div>
               </div>
-            </div>
-            <div class="card-body d-flex flex-column mt-auto">
-              <h5 class="card-title fw-bold"><%= post.title %></h5>
-              <p class="card-text text-muted flex-grow-1">
-                <%= post.content.split(' ').slice(0, 20).join(' ') %>...
-              </p>
-              <a href="/posts/<%= post._id %>" class="btn btn-gradient mt-auto">
-                View Post
-              </a>
-            </div>
+            <% }) %>
           </div>
-        </div>
-        <% }) %>
+        <% } %>
       </div>
-      <% } %>
-    </div>
     <% } %>
   </div>
+
 </div>
 
 <style>
@@ -149,8 +180,47 @@
   transform: translateY(100%);
   transition: transform 0.3s ease;
 }
-
 .post-card:hover .overlay-content {
   transform: translateY(0);
 }
 </style>
+
+<script>
+document.querySelectorAll(".follow-btn").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    const userId = btn.dataset.userId; // target user
+    const isFollowing = btn.dataset.following === "true";
+    const action = isFollowing ? "unfollow" : "follow";
+    const url = `/users/${userId}/${action}`;
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        // Update button text and data-following
+        btn.innerText = data.action === "followed" ? "Unfollow" : "Follow";
+        btn.dataset.following = data.action === "followed";
+
+        // Update target user's followers count
+        const followersCountEl = document.querySelector(`#followersCount-${userId}`);
+        if (followersCountEl) followersCountEl.innerText = data.followersCount;
+
+        // Update current user's following count
+        const followingCountEl = document.querySelector(`#followingCount-<%= currUser._id %>`);
+        if (followingCountEl) followingCountEl.innerText = data.followingCount;
+      } else {
+        alert(data.error);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong. Please try again.");
+    }
+  });
+});
+
+</script>

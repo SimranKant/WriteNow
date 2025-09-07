@@ -956,3 +956,123 @@ main {
     font-size: 1.1rem;
   }
 }
+.btn-gradient {
+  background: linear-gradient(90deg, #007bff, #6610f2);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  transition: all 0.3s ease-in-out;
+}
+.btn-gradient:hover {
+  background: linear-gradient(90deg, #6610f2, #007bff);
+  transform: translateY(-2px);
+}
+/* Hover effect on cards */
+.hover-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 1rem;
+}
+.hover-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Image overlay gradient for better readability */
+.hover-card .card-img-top {
+  transition: transform 0.3s ease;
+}
+.hover-card:hover .card-img-top {
+  transform: scale(1.05);
+}
+.hover-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+  pointer-events: none;
+  border-radius: 1rem;
+}
+
+/* Card body overlay text adjustments */
+.hover-card .card-body {
+  position: relative;
+  z-index: 2;
+}
+
+/* Tabs styling with gradient always visible */
+.nav-pills .nav-link {
+  border-radius: 30px;
+  padding: 0.6rem 1.5rem;
+  background: linear-gradient(90deg, #007bff, #6610f2); /* always gradient */
+  color: #fff;
+  transition: all 0.3s ease-in-out;
+}
+.nav-pills .nav-link:hover {
+  background: linear-gradient(90deg, #6610f2, #007bff);
+}
+.nav-pills .nav-link.active {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+.hover-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 1rem;
+}
+.hover-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Image wrapper */
+.card-img-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem 1rem 0 0;
+}
+
+/* Image zoom on hover */
+.card-img-wrapper img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.hover-card:hover .card-img-wrapper img {
+  transform: scale(1.05);
+}
+
+/* Gradient overlay for title readability */
+.card-img-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+  padding: 1rem;
+  border-radius: 0 0 1rem 1rem;
+}
+
+/* Card body */
+.card-body {
+  z-index: 2;
+  background-color: #fff;
+}
+
+/* Gradient Button */
+.btn-gradient {
+  background: linear-gradient(90deg, #007bff, #6610f2);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  transition: all 0.3s ease-in-out;
+}
+.btn-gradient:hover {
+  background: linear-gradient(90deg, #6610f2, #007bff);
+  transform: translateY(-2px);
+}

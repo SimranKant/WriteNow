@@ -16,6 +16,7 @@ const LocalStrategy = require("passport-local");
 const User = require("./models/users.js");
 const MongoStore = require("connect-mongo");
 const { isLoggedIn } = require("./middleware.js");
+const favicon = require("serve-favicon");
 
 const postsRouter = require("./routes/posts.js");
 const commentsRouter = require("./routes/comments.js");
@@ -41,6 +42,7 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
+// app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 
 const store = MongoStore.create({
   mongoUrl: dbUrl,
@@ -80,6 +82,8 @@ app.use((req, res, next) => {
   res.locals.currUser = req.user;
   next();
 });
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+
 
 app.get("/", (req, res) => {
   res.render("landing/landing.ejs");
@@ -97,7 +101,7 @@ app.get("/team", (req, res) => {
     {
       name: "Jane Doe",
       role: "UI/UX Designer",
-      image: "/images/dev2.jpg",
+      image: "/images/megha.jpg",
       github: "https://github.com/janedoe",
       linkedin: "https://www.linkedin.com/in/janedoe/"
     },
@@ -116,7 +120,7 @@ app.get("/team", (req, res) => {
 
 app.use("/posts", postsRouter);
 app.use("/posts/:id/comments", commentsRouter);
-app.use("/", usersRouter);
+app.use("/users", usersRouter);
 
 
 

@@ -50,13 +50,26 @@ router.put(
 // routes/users.js
 router.get("/:id", isLoggedIn, async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id);
+
+  const user = await User.findById(id)
+    .populate({
+      path: "likedPosts",
+      populate: { path: "author" }
+    });
+
   if (!user) {
     req.flash("error", "User not found");
     return res.redirect("/posts");
   }
-  res.render("users/dashboard.ejs", { user });
+
+  const Post = require("../models/posts");
+  const myPosts = await Post.find({ author: id }).populate("author");
+
+  res.render("users/dashboard.ejs", { user, myPosts });
 });
+
+
+
 
 
 module.exports = router;

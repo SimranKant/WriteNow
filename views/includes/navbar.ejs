@@ -77,15 +77,15 @@
             aria-labelledby="navbarDropdown"
           >
             <li>
-              <a class="dropdown-item" href="/<%= currUser.id %>">Dashboard</a>
+              <a class="dropdown-item" href="/users/<%= currUser.id %>">Dashboard</a>
             </li>
-            <li><a class="dropdown-item" href="/logout">Logout</a></li>
+            <li><a class="dropdown-item" href="/users/logout">Logout</a></li>
           </ul>
         </div>
 
         <% } else { %>
-        <a class="nav-link" href="/register">Register</a>
-        <a class="nav-link" href="/login">Login</a>
+        <a class="nav-link" href="/users/register">Register</a>
+        <a class="nav-link" href="/users/login">Login</a>
         <% } %>
       </div>
     </div>

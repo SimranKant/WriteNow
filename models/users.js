@@ -16,6 +16,16 @@ const userSchema = new Schema({
   following: [{ type: Schema.Types.ObjectId, ref: "User" }],
   createdAt: { type: Date, default: Date.now },
 });
+// Virtual field for liked posts
+userSchema.virtual("likedPosts", {
+  ref: "Post",
+  localField: "_id",
+  foreignField: "likedBy",
+});
+
+// Enable virtuals in JSON and Object output
+userSchema.set("toObject", { virtuals: true });
+userSchema.set("toJSON", { virtuals: true });
 
 // Use email as the login field
 userSchema.plugin(passportLocalMongoose, { usernameField: "username" });

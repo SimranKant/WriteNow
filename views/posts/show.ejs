@@ -7,7 +7,7 @@
     <div class="post-header d-flex align-items-center mb-3">
       <div class="author-avatar me-3">
         <% if(post.author.profilePicture && post.author.profilePicture.url){ %>
-        <a href="/<%= post.author._id %>"><img
+        <a href="/users/<%= post.author._id %>"><img
           src="<%= post.author.profilePicture.url %>"
           alt="Author"
           class="rounded-circle"
@@ -118,7 +118,7 @@
         <div class="comment-avatar me-2">
           <% if(comment.owner.profilePicture &&
           comment.owner.profilePicture.url){ %>
-          <a href="/<%= comment.owner._id %>">
+          <a href="/users/<%= comment.owner._id %>">
             <img
               src="<%= comment.owner.profilePicture.url %>"
               alt="Commenter"

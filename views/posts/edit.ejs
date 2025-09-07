@@ -1,45 +1,75 @@
 <% layout('layouts/boilerplate') -%>
-<div class="row mt-3">
-  <div class="col-8 offset-2">
-    <b><h3 style="color: green; font-weight: 800;">Edit Post</h3></b>
-    <form method="post" action="/posts/<%= post._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
-      <div class="mb-3">
-        <label for="title" class="form-label">Title</label>
-        <input
-          name="post[title]"
-          placeholder="Add a catchy title"
-          type="text"
-          class="form-control"
-          value="<%= post.title %>"
-          required
-        />
-        <div class="invalid-feedback">Title is required</div>
-      </div>
-      <div class="mb-3">
-        <label for="content" class="form-label">Content</label>
-        <textarea
-          name="post[content]"
-          class="form-control"
-          rows="10"
-          required
-        ><%= post.content %></textarea>
-        <div class="invalid-feedback">Description is required</div>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Old Image</label><br>
-        <img src="<%= originalImageUrl %>">
-      </div>
-      <div class="mb-3">
-        <label for="image" class="form-label">Upload new Image</label>
-        <input
-          name="post[image]"
-          placeholder="enter image URL/Link"
-          type="file"
-          class="form-control"
-        />
-      </div>
-      <button class="btn btn-success edit-btn mt-3">Edit</button>
-      <br /><br />
-    </form>
+
+<div class="row mt-5">
+  <div class="col-10 col-md-8 col-lg-6 offset-1 offset-md-2 offset-lg-3">
+    <div class="register-form p-4 shadow-lg">
+      <h3 class="text-center hero-gradient-text mb-4">✏️ Edit Post</h3>
+
+      <form 
+        method="post" 
+        action="/posts/<%= post._id %>?_method=PUT" 
+        novalidate 
+        class="needs-validation" 
+        enctype="multipart/form-data"
+      >
+        <!-- Title -->
+        <div class="form-floating mb-4">
+          <input
+            type="text"
+            class="form-control custom-input"
+            name="post[title]"
+            id="title"
+            value="<%= post.title %>"
+            placeholder="Enter title"
+            required
+          />
+          <label for="title">Title</label>
+          <div class="invalid-feedback">Title is required</div>
+        </div>
+
+        <!-- Content -->
+        <div class="form-floating mb-4">
+          <textarea
+            class="form-control custom-input"
+            name="post[content]"
+            id="content"
+            placeholder="Write your post content here"
+            style="height: 150px"
+            required
+          ><%= post.content %></textarea>
+          <label for="content">Content</label>
+          <div class="invalid-feedback">Description is required</div>
+        </div>
+
+        <!-- Old Image Preview -->
+        <div class="mb-4 text-center">
+          <label class="form-label fw-bold text-secondary">Old Image</label><br>
+          <img 
+            src="<%= originalImageUrl %>" 
+            alt="Old Post Image" 
+            class="rounded shadow-sm mt-2"
+            style="max-height: 200px; object-fit: cover;"
+          >
+        </div>
+
+        <!-- Upload New Image -->
+        <div class="mb-4">
+          <label for="image" class="form-label fw-bold text-secondary">Upload New Image</label>
+          <input
+            type="file"
+            name="post[image]"
+            id="image"
+            class="form-control"
+          />
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center">
+          <button type="submit" class="btn-hero px-4 py-2">
+            <i class="bi bi-pencil-square"></i> Update Post
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

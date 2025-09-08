@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const users = require("../controllers/users");  
+const users = require("../controllers/users");
 const wrapAsync = require("../utils/wrapAsync.js");
 const User = require("../models/users.js");
 
@@ -42,37 +42,47 @@ router.get("/logout", logout);
 
 // Edit Profile
 router.get("/:id/edit", isLoggedIn, users.renderEditForm);
-router.put("/:id", isLoggedIn, users.uploadProfile, wrapAsync(users.updateProfile));
+router.put(
+  "/:id",
+  isLoggedIn,
+  users.uploadProfile,
+  wrapAsync(users.updateProfile)
+);
 
 // User Dashboard
-router.get("/:id", isLoggedIn, wrapAsync(async (req, res) => {
-  const { id } = req.params;
+router.get(
+  "/:id",
+  isLoggedIn,
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
 
-  const user = await User.findById(id)
-    .populate({ path: "likedPosts", populate: { path: "author" } });
+    const user = await User.findById(id)
+  .populate({ path: "likedPosts", populate: { path: "author" } })
+  .populate({ 
+    path: "followers", 
+    populate: { path: "followers" }   // ✅ nested populate
+  })
+  .populate({ 
+    path: "following", 
+    populate: { path: "followers" }   // ✅ nested populate
+  });
 
-  if (!user) {
-    req.flash("error", "User not found");
-    return res.redirect("/posts");
-  }
+    if (!user) {
+      req.flash("error", "User not found");
+      return res.redirect("/posts");
+    }
 
-  const Post = require("../models/posts");
-  const myPosts = await Post.find({ author: id }).populate("author");
+    const Post = require("../models/posts");
+    const myPosts = await Post.find({ author: id }).populate("author");
 
-  res.render("users/dashboard.ejs", { user, myPosts, currUser: req.user });
-
-}));
-
-
+    res.render("users/dashboard.ejs", { user, myPosts, currUser: req.user });
+  })
+);
 
 // Follow
 router.post("/:id/follow", users.followUser);
 
 // Unfollow
 router.post("/:id/unfollow", users.unfollowUser);
-
-
-
-
 
 module.exports = router;

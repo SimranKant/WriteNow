@@ -33,8 +33,11 @@ module.exports.validatePost = (req, res, next) => {
   let { error } = postSchema.validate(req.body);
   if (error) {
     let errMsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(400, errMsg);
+    req.flash("error", errMsg);
+    return res.redirect("/posts/new");
+    
   }
+  
   next();
 };
 

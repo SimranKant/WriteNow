@@ -1,0 +1,65 @@
+<% layout('layouts/boilerplate') -%>
+
+<div class="chat-container">
+  <div class="chat-header">
+    <a href="/users/<%= receiver._id %>">
+    <img src="<%= receiver.profilePicture && receiver.profilePicture.url ? receiver.profilePicture.url : '/images/default-avatar.png' %>" alt="avatar" class="chat-avatar">
+    </a>
+    <a href="/users/<%= receiver._id %>">
+    <h4><%= receiver.username %></h4>
+    </a>
+  </div>
+
+  <div id="messages" class="chat-messages">
+    <% messages.forEach(msg => { %>
+      <div class="msg <%= msg.sender.equals(senderId) ? 'my-msg' : 'their-msg' %>">
+        <p><%= msg.message %></p>
+        <span class="time"><%= new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %></span>
+      </div>
+    <% }) %>
+  </div>
+
+  <form id="chatForm" class="chat-input-area">
+    <input type="text" id="msgInput" placeholder="Type a message..." autocomplete="off" />
+    <button type="submit">Send</button>
+  </form>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  const sender = "<%= senderId %>";
+  const receiver = "<%= receiver._id %>";
+
+  socket.emit('registerUser', sender);
+
+  const form = document.getElementById('chatForm');
+  const input = document.getElementById('msgInput');
+  const messagesDiv = document.getElementById('messages');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const message = input.value.trim();
+    if (message) {
+      socket.emit('privateMessage', { sender, receiver, message });
+      messagesDiv.innerHTML += `
+        <div class="msg my-msg">
+          <p>${message}</p>
+          <span class="time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+        </div>`;
+      input.value = '';
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+  });
+
+  socket.on('privateMessage', ({ sender, message }) => {
+    if (sender !== "<%= senderId %>") {
+      messagesDiv.innerHTML += `
+        <div class="msg their-msg">
+          <p>${message}</p>
+          <span class="time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+        </div>`;
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+  });
+</script>

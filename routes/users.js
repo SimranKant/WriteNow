@@ -55,7 +55,6 @@ router.get(
   isLoggedIn,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
-
     const user = await User.findById(id)
   .populate({ path: "likedPosts", populate: { path: "author" } })
   .populate({ 

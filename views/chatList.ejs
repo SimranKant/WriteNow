@@ -1,0 +1,28 @@
+<% layout('layouts/boilerplate') -%>
+
+<div class="chatlist-container">
+  <div class="chatlist-header">
+    <h3>Chats</h3>
+  </div>
+
+  <% if (chats.length === 0) { %>
+    <div class="p-4 text-center text-muted">
+      <p>No recent chats yet. Start a conversation!</p>
+    </div>
+  <% } else { %>
+    <% chats.forEach(chat => { %>
+      <a href="/chat/<%= chat.user._id %>" class="chat-item">
+        <div class="chat-avatar">
+          <img src="<%= chat.user.profilePicture && chat.user.profilePicture.url ? chat.user.profilePicture.url : '/images/default-avatar.png' %>" alt="avatar">
+        </div>
+        <div class="chat-info">
+          <h5><%= chat.user.username %></h5>
+          <p class="last-msg"><%= chat.lastMessage %></p>
+        </div>
+        <div class="chat-time">
+          <%= new Date(chat.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %>
+        </div>
+      </a>
+    <% }) %>
+  <% } %>
+</div>

@@ -140,15 +140,15 @@
       </div>
     <% } %>
 
-    <!-- Followers -->
+<!-- Followers -->
 <div class="tab-pane fade" id="followers" role="tabpanel">
   <% if(user.followers.length === 0){ %>
     <p class="text-muted text-center">No followers yet.</p>
   <% } else { %>
     <ul class="list-group">
       <% user.followers.forEach(follower => { %>
-        <li class="list-group-item d-flex align-items-center justify-content-between">
-          <div class="d-flex align-items-center">
+        <li class="list-group-item d-flex align-items-center justify-content-between flex-wrap">
+          <div class="d-flex align-items-center mb-2 mb-md-0">
             <img src="<%= follower.profilePicture?.url || '/images/default-avatar.png' %>" 
                  class="rounded-circle me-2" style="width:40px; height:40px; object-fit:cover"/>
             <a href="/users/<%= follower._id %>" class="fw-semibold text-decoration-none">
@@ -156,14 +156,22 @@
             </a>
           </div>
 
-          <% if(currUser && !currUser._id.equals(follower._id)) { %>
-            <button
-              class="btn btn-sm btn-outline-primary follow-btn"
-              data-user-id="<%= follower._id %>"
-              data-following="<%= follower.followers.some(f => f.equals(currUser._id)) %>"
-            >
-              <%= follower.followers.some(f => f.equals(currUser._id)) ? "Unfollow" : "Follow" %>
-            </button>
+          <% if(currUser && currUser._id.equals(user._id)) { %> 
+            <!-- Show Chat & Follow buttons ONLY if viewing own profile -->
+            <div class="d-flex gap-2">
+              <a href="/chat/<%= follower._id %>" class="btn btn-sm btn-outline-success rounded-pill">
+                💬 Chat
+              </a>
+              <% if(!currUser._id.equals(follower._id)) { %>
+                <button
+                  class="btn btn-sm btn-outline-primary follow-btn rounded-pill"
+                  data-user-id="<%= follower._id %>"
+                  data-following="<%= follower.followers.some(f => f.equals(currUser._id)) %>"
+                >
+                  <%= follower.followers.some(f => f.equals(currUser._id)) ? "Unfollow" : "Follow" %>
+                </button>
+              <% } %>
+            </div>
           <% } %>
         </li>
       <% }) %>
@@ -178,8 +186,8 @@
   <% } else { %>
     <ul class="list-group">
       <% user.following.forEach(followed => { %>
-        <li class="list-group-item d-flex align-items-center justify-content-between">
-          <div class="d-flex align-items-center">
+        <li class="list-group-item d-flex align-items-center justify-content-between flex-wrap">
+          <div class="d-flex align-items-center mb-2 mb-md-0">
             <img src="<%= followed.profilePicture?.url || '/images/default-avatar.png' %>" 
                  class="rounded-circle me-2" style="width:40px; height:40px; object-fit:cover"/>
             <a href="/users/<%= followed._id %>" class="fw-semibold text-decoration-none">
@@ -187,20 +195,30 @@
             </a>
           </div>
 
-          <% if(currUser && !currUser._id.equals(followed._id)) { %>
-            <button
-              class="btn btn-sm btn-outline-primary follow-btn"
-              data-user-id="<%= followed._id %>"
-              data-following="<%= followed.followers.some(f => f.equals(currUser._id)) %>"
-            >
-              <%= followed.followers.some(f => f.equals(currUser._id)) ? "Unfollow" : "Follow" %>
-            </button>
+          <% if(currUser && currUser._id.equals(user._id)) { %> 
+            <!-- Show Chat & Follow buttons ONLY if viewing own profile -->
+            <div class="d-flex gap-2">
+              <a href="/chat/<%= followed._id %>" class="btn btn-sm btn-outline-success rounded-pill">
+                💬 Chat
+              </a>
+              <% if(!currUser._id.equals(followed._id)) { %>
+                <button
+                  class="btn btn-sm btn-outline-primary follow-btn rounded-pill"
+                  data-user-id="<%= followed._id %>"
+                  data-following="<%= followed.followers.some(f => f.equals(currUser._id)) %>"
+                >
+                  <%= followed.followers.some(f => f.equals(currUser._id)) ? "Unfollow" : "Follow" %>
+                </button>
+              <% } %>
+            </div>
           <% } %>
         </li>
       <% }) %>
     </ul>
   <% } %>
 </div>
+
+
 
 
   </div>

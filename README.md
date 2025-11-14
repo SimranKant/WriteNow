@@ -1,6 +1,6 @@
 # WriteNow
 
-A full-stack social media and real-time chat application built with modern web technologies. WriteNow combines social posting features with WhatsApp-like messaging capabilities, allowing users to share posts, leave comments, and communicate in real-time.
+A full-stack social media and real-time chat application built with modern web technologies. WriteNow combines social posting features with messaging, allowing users to share posts, leave comments, and communicate in real time.
 
 ## 🚀 Features
 
